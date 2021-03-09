@@ -1,0 +1,276 @@
+// var
+
+$accentBlue: #1a8ad8;
+$cardBack: #E6F4F1;
+$done: green;
+$inProgress: #ff9800;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+
+
+
+// in progress loader
+
+.lds-dual-ring {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 14px;
+    height: 14px;
+    margin: 3px;
+    border-radius: 50%;
+    border: 5px solid $inProgress;
+    border-color: $inProgress transparent $inProgress transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+//------------- VUE animations
+
+.slide-leave-active,
+.slide-enter-active {
+    transition: .5s;
+}
+
+.slide-enter {
+    transform: translate(0, 100%);
+}
+
+.slide-leave-to {
+    transform: translate(0, 200%);
+}
+
+
+//----------------------------
+
+
+
+.h1 {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.h2 {
+    font-size: 24px;
+    font-weight: 700;
+    padding: 20px 0;
+}
+#app{
+    width: 100%;
+    transition: 0.4s width;
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 999;
+    background: #fff;
+}
+
+.check-list-page {
+    &__container {
+        padding: 0 40px;
+        min-width: 1200px;
+        padding-bottom: 50px;
+    }
+
+    &__wrapper {
+        max-width: 80%;
+        min-width: 800px;
+        padding: 0 20px;
+        margin: auto;
+
+    }
+
+    &__close {
+        position: absolute;
+        right: 32px;
+        top: 32px;
+        width: 32px;
+        height: 32px;
+        opacity: 0.3;
+        cursor: pointer;
+        &:hover {
+            opacity: 1;
+        }
+        &:before, &:after {
+            position: absolute;
+            left: 15px;
+            content: ' ';
+            height: 33px;
+            width: 2px;
+            background-color: #3c7af3;
+        }
+        &:before {
+            transform: rotate(45deg);
+        }
+        &:after {
+            transform: rotate(-45deg);
+        }
+
+    }
+
+    &__title {
+        padding: 20px 0;
+    }
+
+    &__sale-comment {
+        margin-top: 50px;
+        padding: 20px 50px;
+        margin: auto;
+        background: $accentBlue;
+        border-radius: 15px;
+    }
+
+    &__sale-title {
+        color: #fff;
+    }
+
+    &__sale-text {
+        color: #fff;
+        font-size: 18px;
+    }
+
+    &__checklist {}
+}
+
+.checklist {
+
+
+    &__title {
+        font-size: 18px;
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+    &__block {
+        width: calc(33% - 10px);
+        margin: 5px;
+        padding: 30px;
+        background: $cardBack;
+        border-radius: 15px;
+        box-sizing: border-box;
+        position: relative;
+        transition: 0.2s box-shadow;
+        &:hover{
+            box-shadow: 0 0 15px #c1c0c0;
+        }
+    }
+
+    &__checkbox {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
+        border: 2px solid #3a3a3a;
+        border-radius: 4px;
+        margin-right: 8px;
+        position: relative;
+    }
+
+    &__lvl2 {
+        position: relative;
+        padding: 10px 0 0 35px;
+    }
+
+    &__item {
+        cursor: pointer;
+        display: flex;
+        padding: 5px 0;
+        align-items: center;
+
+        &.done {
+            color: $done;
+
+            .checklist__checkbox {
+                border-color: $done;
+
+                &::after {
+                    content: '';
+                    display: block;
+                    border-bottom: 2px solid $done;
+                    border-right: 2px solid $done;
+                    width: 10px;
+                    height: 15px;
+                    transform: rotate(40deg);
+                    position: absolute;
+                    top: 3px;
+                    left: 8px;
+                }
+            }
+        }
+        &.inProgress{
+            color: $inProgress;
+
+            .checklist__checkbox {
+                border-color: $inProgress;
+            }
+        }
+    }
+    
+    &__done-count {
+        position: absolute;
+        right: 30px;
+        top: 20px;
+    }
+}
+
+.project-status {
+    width: 100%;
+    height: 30px;
+    background: #b1cbff;
+    position: relative;
+
+    &__progress {
+    height: 100%;
+    background: #3c7af3;
+    width: 0;
+    }
+
+    &__text {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        color: #fff;
+        z-index: 9999;
+        position: absolute;
+        line-height: 30px;
+        top: 0;
+    }
+
+    &__count {
+    }
+
+    &__button {
+        background: #2f68bad6;
+        color: #fff;
+        outline: none;
+        border: none;
+        padding: 2px 4px 4px 4px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="scss/style.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-bind:class="{open : open}">
+        <div class="project-status">
+            <div class="project-status__progress" v-bind:style="{width: progress + '%'}"></div>
+            <div class="project-status__text">
+                <span class="project-status__count">
+                    Ваш проект настроен на {{progress}} %  &nbsp; &nbsp;
+                    <button class="project-status__button" @click="openClose()">Чеклист</button>
+                </span>
+            </div>
+        </div>
+
+        <transition name="slide">
+            <div class="check-list-page" v-if="open" id="checkListPage">
+                <div class="check-list-page__container">
+                    <div class="check-list-page__close" @click="openClose()" id="checklistPageClose"></div>
+                    <div class="check-list-page__title h1">Этапы создания интернет-магазина</div>
+                    <div class="check-list-page__wrapper">
+                        <div class="check-list-page__sale-comment">
+                            <div class="check-list-page__sale-title h2">Уточнения по проекту озвученные вашему менеджеру
+                            </div>
+                            <div class="check-list-page__sale-text">
+                                {{sites[0][2]}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-list-page__checklist checklist">
+                        <div class="checklist__title h2">Чеклист</div>
+                        <div class="checklist__list">
+                            <template v-for="item of checkList">
+                                <template v-if="item[1] === 0">
+                                    <div class="checklist__block">
+                                        <div class="checklist__item" v-bind:class="{done : doneCounter(item[0],true) }">
+                                            <div class="checklist__checkbox"></div>
+                                            <div class="checklist__title">{{item[2]}}</div>
+                                            <div class="checklist__done-count">{{doneCounter(item[0])}}</div>
+                                        </div>
+                                        <div class="checklist__lvl2">
+                                            <template v-for="innerItem of checkList">
+                                                <template v-if="innerItem[1] === item[0]">
+                                                    <div class="checklist__item" v-bind:class="statusCheck(innerItem[0])" @click="doneClick(innerItem[0])">
+                                                        <div class="checklist__checkbox">
+                                                            <template v-if="inProgressCheck(innerItem[0])">
+                                                                <div class="lds-dual-ring"></div>
+                                                            </template>
+                                                        </div>
+                                                        <div class="checklist__title">{{innerItem[2]}}</div>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script src="vue/app.js"></script>
+</body>
+
+</html>
