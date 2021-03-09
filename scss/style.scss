@@ -14,6 +14,11 @@ $fontSize-M: 16px;
 }
 
 
+// 
+
+#header .controls {
+    padding: 35px 0 0;
+}
 
 
 
@@ -353,6 +358,12 @@ $fontSize-M: 16px;
     &__text {
         color: #000;
         font-size: $fontSize-M;
+        ul,ol {
+            margin-left: 20px;
+        }
+        p {
+            padding: 10px 0;
+        }
     }
     &__comment{
         display: flex;

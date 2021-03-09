@@ -3,8 +3,9 @@ var vueHTML = `
 * {
   font-family: 'Montserrat', sans-serif;
 }
-#header .controls{
-    padding: 35px 0 0;
+
+#header .controls {
+  padding: 35px 0 0;
 }
 
 .lds-dual-ring {
@@ -372,6 +373,14 @@ var vueHTML = `
   font-size: 16px;
 }
 
+.info-side__text ul, .info-side__text ol {
+  margin-left: 20px;
+}
+
+.info-side__text p {
+  padding: 10px 0;
+}
+
 .info-side__comment {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -519,7 +528,7 @@ function vueApp() {
     
     async function getData() {
         // `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec${'?domain='+window.location.hostname}`
-        var app = `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec?domain=satan666`,
+        var app = `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec${'?domain='+window.location.hostname}`,
             output = {},
             xhr = new XMLHttpRequest();
         xhr.open('GET', app);

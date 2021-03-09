@@ -3,6 +3,10 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+#header .controls {
+  padding: 35px 0 0;
+}
+
 .lds-dual-ring {
   display: inline-block;
   width: 30px;
@@ -366,6 +370,14 @@
 .info-side__text {
   color: #000;
   font-size: 16px;
+}
+
+.info-side__text ul, .info-side__text ol {
+  margin-left: 20px;
+}
+
+.info-side__text p {
+  padding: 10px 0;
 }
 
 .info-side__comment {
