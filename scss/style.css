@@ -60,6 +60,22 @@
           transform: translate(0, 200%);
 }
 
+.slide_right-leave-active,
+.slide_right-enter-active {
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.slide_right-enter {
+  -webkit-transform: translate(100%, 0);
+          transform: translate(100%, 0);
+}
+
+.slide_right-leave-to {
+  -webkit-transform: translate(200%, 0);
+          transform: translate(200%, 0);
+}
+
 .h1 {
   font-size: 28px;
   font-weight: 800;
@@ -80,6 +96,11 @@
   position: absolute;
   z-index: 999;
   background: #fff;
+  overflow: hidden;
+}
+
+.check-list-page {
+  position: relative;
 }
 
 .check-list-page__container {
@@ -128,6 +149,11 @@
           transform: rotate(-45deg);
 }
 
+.check-list-page__close--left {
+  right: unset;
+  left: 32px;
+}
+
 .check-list-page__title {
   padding: 20px 0;
 }
@@ -149,8 +175,21 @@
   font-size: 18px;
 }
 
+.check-list-page__info {
+  top: 0;
+  right: 0;
+  position: absolute;
+  width: 40%;
+  min-width: 300px;
+  background: #fff;
+  height: 100%;
+  -webkit-box-shadow: -4px 9px 15px #86c5f1;
+          box-shadow: -4px 9px 15px #86c5f1;
+}
+
 .checklist__title {
   font-size: 18px;
+  padding-right: 25px;
 }
 
 .checklist__list {
@@ -196,6 +235,10 @@
   border-radius: 4px;
   margin-right: 8px;
   position: relative;
+}
+
+.checklist__checkbox:hover {
+  border-color: green;
 }
 
 .checklist__lvl2 {
@@ -250,6 +293,30 @@
   top: 20px;
 }
 
+.checklist .checklist__info-button {
+  position: absolute;
+  right: 0;
+  border: 1px solid;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 50%;
+  font-size: 12px;
+  color: #1a8ad8;
+  opacity: 0.5;
+  cursor: pointer;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+
+.checklist .checklist__info-button:hover {
+  color: #000;
+  opacity: 1;
+  -webkit-transition: 0.1s all ease-in;
+  transition: 0.1s all ease-in;
+}
+
 .project-status {
   width: 100%;
   height: 30px;
@@ -282,5 +349,25 @@
   padding: 2px 4px 4px 4px;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.info-side__container {
+  height: 100%;
+  padding: 60px 40px;
+}
+
+.info-side__comment {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  padding-bottom: 15px;
+}
+
+.info-side__comment-text {
+  padding-left: 5px;
+  color: #ff9800;
 }
 /*# sourceMappingURL=style.css.map */

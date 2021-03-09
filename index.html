@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link rel="stylesheet" href="scss/style.css">
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
         }
@@ -21,7 +21,7 @@
             <div class="project-status__progress" v-bind:style="{width: progress + '%'}"></div>
             <div class="project-status__text">
                 <span class="project-status__count">
-                    Ваш проект настроен на {{progress}} %  &nbsp; &nbsp;
+                    Ваш проект настроен на {{progress}} % &nbsp; &nbsp;
                     <button class="project-status__button" @click="openClose()">Чеклист</button>
                 </span>
             </div>
@@ -30,7 +30,7 @@
         <transition name="slide">
             <div class="check-list-page" v-if="open" id="checkListPage">
                 <div class="check-list-page__container">
-                    <div class="check-list-page__close" @click="openClose()" id="checklistPageClose"></div>
+                    <div class="check-list-page__close" @click="openClose()"></div>
                     <div class="check-list-page__title h1">Этапы создания интернет-магазина</div>
                     <div class="check-list-page__wrapper">
                         <div class="check-list-page__sale-comment">
@@ -55,13 +55,17 @@
                                         <div class="checklist__lvl2">
                                             <template v-for="innerItem of checkList">
                                                 <template v-if="innerItem[1] === item[0]">
-                                                    <div class="checklist__item" v-bind:class="statusCheck(innerItem[0])" @click="doneClick(innerItem[0])">
-                                                        <div class="checklist__checkbox">
+                                                    <div class="checklist__item"
+                                                        v-bind:class="statusCheck(innerItem[0])">
+                                                        <div class="checklist__checkbox"
+                                                            @click="doneClick(innerItem[0])">
                                                             <template v-if="inProgressCheck(innerItem[0])">
                                                                 <div class="lds-dual-ring"></div>
                                                             </template>
                                                         </div>
                                                         <div class="checklist__title">{{innerItem[2]}}</div>
+                                                        <div class="checklist__info-button" @click="openCloseInfo(innerItem[0],innerItem[3])">?
+                                                        </div>
                                                     </div>
                                                 </template>
                                             </template>
@@ -71,6 +75,17 @@
                             </template>
                         </div>
                     </div>
+                    <transition name="slide_right">
+                        <div class="check-list-page__info info-side" v-if="info.open">
+                            <div class="info-side__container">
+                                <div class="check-list-page__close check-list-page__close--left"
+                                    @click="openCloseInfo()"></div>
+                                <div class="info-side__title h2">Больше информации</div>
+                                <div class="info-side__comment" v-if="info.comment"><div class="lds-dual-ring"></div><div class="info-side__comment-text">{{info.commentText}}</div></div>
+                                <div class="info-side__text" v-html="info.text"></div>
+                            </div>
+                        </div>
+                    </transition>
                 </div>
             </div>
         </transition>

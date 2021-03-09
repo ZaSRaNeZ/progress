@@ -62,6 +62,20 @@ $inProgress: #ff9800;
 }
 
 
+.slide_right-leave-active,
+.slide_right-enter-active {
+    transition: .5s;
+}
+
+.slide_right-enter {
+    transform: translate(100%, 0);
+}
+
+.slide_right-leave-to {
+    transform: translate(200%, 0);
+}
+
+
 //----------------------------
 
 
@@ -83,9 +97,11 @@ $inProgress: #ff9800;
     position: absolute;
     z-index: 999;
     background: #fff;
+    overflow: hidden;
 }
 
 .check-list-page {
+    position: relative;
     &__container {
         padding: 0 40px;
         min-width: 1200px;
@@ -126,6 +142,11 @@ $inProgress: #ff9800;
             transform: rotate(-45deg);
         }
 
+        &--left{
+            right: unset;
+            left: 32px;
+        }
+
     }
 
     &__title {
@@ -150,6 +171,17 @@ $inProgress: #ff9800;
     }
 
     &__checklist {}
+
+    &__info{
+        top: 0;
+        right: 0;
+        position: absolute;
+        width: 40%;
+        min-width: 300px;
+        background: #fff;
+        height: 100%;
+        box-shadow: -4px 9px 15px #86c5f1;
+    }
 }
 
 .checklist {
@@ -157,6 +189,7 @@ $inProgress: #ff9800;
 
     &__title {
         font-size: 18px;
+        padding-right: 25px;
     }
 
     &__list {
@@ -189,6 +222,9 @@ $inProgress: #ff9800;
         border-radius: 4px;
         margin-right: 8px;
         position: relative;
+        &:hover {
+            border-color: $done;
+        }
     }
 
     &__lvl2 {
@@ -236,6 +272,29 @@ $inProgress: #ff9800;
         right: 30px;
         top: 20px;
     }
+
+    .checklist__info-button {
+        position: absolute;
+        right: 0;
+        border: 1px solid;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 50%;
+        font-size: 12px;
+        color: #1a8ad8;
+        opacity: 0.5;
+        cursor: pointer;
+        transition: 0.3s all;
+
+        &:hover{
+            color: #000;
+            opacity: 1;
+            transition: 0.1s all ease-in;
+            
+        }
+    }
 }
 
 .project-status {
@@ -272,5 +331,28 @@ $inProgress: #ff9800;
         padding: 2px 4px 4px 4px;
         cursor: pointer;
         border-radius: 4px;
+    }
+}
+
+.info-side {
+
+    &__container {
+        height: 100%;
+        padding: 60px 40px;
+    }
+
+    &__title {
+    }
+
+    &__text {
+    }
+    &__comment{
+        display: flex;
+        align-items: flex-start;
+        padding-bottom: 15px;
+    }
+    &__comment-text{
+        padding-left: 5px;
+        color: $inProgress;
     }
 }

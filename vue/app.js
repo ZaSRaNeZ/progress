@@ -2,128 +2,13 @@ var app = new Vue({
     el: '#app',
     data: {
         open: false,
+        info:{
+            open:false,
+            text:'об`яснение по пункту',
+            comment: false,
+            commentText:'Сейчас этой задачей занимается ваш менеджер. Он свяжется с вами по окончанию)'
+        },
         checkList: [
-            [
-                1,
-                0,
-                "Контент"
-            ],
-            [
-                2,
-                0,
-                "Дизайн"
-            ],
-            [
-                3,
-                0,
-                "Индивидуальная информация"
-            ],
-            [
-                4,
-                0,
-                "Интеграции"
-            ],
-            [
-                5,
-                0,
-                "Общие настройки сайта"
-            ],
-            [
-                6,
-                1,
-                "Настройка шаблонов"
-            ],
-            [
-                7,
-                1,
-                "Настройка структуры"
-            ],
-            [
-                8,
-                1,
-                "Добавление товаров"
-            ],
-            [
-                9,
-                1,
-                "Добавление баннеров"
-            ],
-            [
-                10,
-                2,
-                "Выбрать дизайн из галереи"
-            ],
-            [
-                11,
-                2,
-                "Настроить цветовую гамму"
-            ],
-            [
-                12,
-                2,
-                "Внести правки",
-                0
-            ],
-            [
-                13,
-                2,
-                "Добавить иконки разделов"
-            ],
-            [
-                14,
-                2,
-                "Изменить иконки примуществ"
-            ],
-            [
-                15,
-                2,
-                "Настроить стикеры"
-            ],
-            [
-                16,
-                3,
-                "Номера телефонов"
-            ],
-            [
-                17,
-                3,
-                "Адреса"
-            ],
-            [
-                18,
-                3,
-                "Карта проезда"
-            ],
-            [
-                19,
-                3,
-                "Время работы"
-            ],
-            [
-                20,
-                3,
-                "О магазине"
-            ],
-            [
-                21,
-                3,
-                "Слоган"
-            ],
-            [
-                22,
-                3,
-                "Заполнение инфо страниц"
-            ],
-            [
-                23,
-                5,
-                "Варианты оплат"
-            ],
-            [
-                24,
-                5,
-                "Варианты доставки"
-            ]
         ],
         sites: [
             [
@@ -131,7 +16,7 @@ var app = new Vue({
                 "satan666.horoshop.ua",
                 "Комментарии продавца по этому проекту",
                 [1,2,4,6,7,8,9,21,15,34],
-                "11,13"
+                [11,13]
             ]
         ],
         domain: "satan666",
@@ -144,6 +29,9 @@ var app = new Vue({
             console.log(out);
             return Math.round(out);
         }
+    },
+    beforeCreate(){
+        getData();
     },
     methods:{
         checkListTitle: ()=>{
@@ -188,16 +76,34 @@ var app = new Vue({
             return `${doneCount}/${all}`;
         },
         inProgressCheck: function(itemId){
-            let inProgress = this.sites[0][4].split(',');
+            let inProgress = this.sites[0][4];
+            try{
             for(item of inProgress){
                 if (parseInt(item) == parseInt(itemId)){
                     return true;
                 }
             }
+            }catch(e){}
         },
         openClose: function(){
             if (this.open) this.open = false;
             else if (!this.open) this.open = true;
+        },
+        openCloseInfo: function(itemId, text){
+            if(this.info.text != text){
+                if(text == '' || text == undefined){
+                    this.info.text = 'Свяжитесь с вашим менеджером для уточнений и мы все расскажем по этому пункту =)';
+                }
+                else{
+                    this.info.text = text;
+                }
+            }
+            if (this.inProgressCheck(itemId)){
+                this.info.comment = true;
+            }
+            else{this.info.comment = false;}
+            if (this.info.open) this.info.open = false;
+            else if (!this.info.open) this.info.open = true;
         },
         doneClick: function(itemId){
             console.log(itemId)
@@ -211,9 +117,16 @@ var app = new Vue({
     }
 })
 
+function update(data) {
+    app.checkList = data.checkList;
+    app.sites = data.sites;
+    app.sites[0][3] = data.sites[0][3].split(',');
+    app.sites[0][4] = data.sites[0][4].split(',');
+}
 
-function getData() {
-    var app = `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec${'?domain='+window.location.hostname}`,
+async function getData() {
+    // `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec${'?domain='+window.location.hostname}`
+    var app = `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec?domain=satan666`,
         output = {},
         xhr = new XMLHttpRequest();
     xhr.open('GET', app);
@@ -225,8 +138,8 @@ function getData() {
             } catch (e) {}
         }
         console.log('data was get');
-        data = output;
-        update();
+        output;
+        update(output);
     }
     xhr.send()
 };
