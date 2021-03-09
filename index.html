@@ -64,7 +64,7 @@
                                                             </template>
                                                         </div>
                                                         <div class="checklist__title">{{innerItem[2]}}</div>
-                                                        <div class="checklist__info-button" @click="openCloseInfo(innerItem[0],innerItem[3])">?
+                                                        <div class="checklist__info-button" @click="openCloseInfo(innerItem[0],innerItem[4])">?
                                                         </div>
                                                     </div>
                                                 </template>
@@ -81,7 +81,8 @@
                                 <div class="check-list-page__close check-list-page__close--left"
                                     @click="openCloseInfo()"></div>
                                 <div class="info-side__title h2">Больше информации</div>
-                                <div class="info-side__comment" v-if="info.comment"><div class="lds-dual-ring"></div><div class="info-side__comment-text">{{info.commentText}}</div></div>
+                                <div class="info-side__comment info-side__comment--inProgress" v-if="info.comment"><div class="info-side__comment-icon"><div class="lds-dual-ring"></div></div><div class="info-side__comment-text">{{info.commentText}}</div></div>
+                                <div class="info-side__comment info-side__comment--block" v-if="info.block"><div class="info-side__comment-icon">!</div> <div class="info-side__comment-text">{{info.blockText}}</div></div>
                                 <div class="info-side__text" v-html="info.text"></div>
                             </div>
                         </div>

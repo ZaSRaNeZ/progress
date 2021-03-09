@@ -79,12 +79,14 @@
 .h1 {
   font-size: 28px;
   font-weight: 800;
+  color: #000;
 }
 
 .h2 {
   font-size: 24px;
   font-weight: 700;
   padding: 20px 0;
+  color: #000;
 }
 
 #app {
@@ -255,6 +257,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  color: #000;
 }
 
 .checklist__item.done {
@@ -356,6 +359,15 @@
   padding: 60px 40px;
 }
 
+.info-side__title {
+  color: #000;
+}
+
+.info-side__text {
+  color: #000;
+  font-size: 16px;
+}
+
 .info-side__comment {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -364,10 +376,29 @@
       -ms-flex-align: start;
           align-items: flex-start;
   padding-bottom: 15px;
+  font-size: 16px;
+}
+
+.info-side__comment--block {
+  color: red;
+}
+
+.info-side__comment--inProgress {
+  color: #ff9800;
 }
 
 .info-side__comment-text {
   padding-left: 5px;
-  color: #ff9800;
+  font-size: 16px;
+}
+
+.info-side__comment-icon {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 28px;
 }
 /*# sourceMappingURL=style.css.map */

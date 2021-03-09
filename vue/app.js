@@ -6,17 +6,19 @@ var app = new Vue({
             open:false,
             text:'об`яснение по пункту',
             comment: false,
-            commentText:'Сейчас этой задачей занимается ваш менеджер. Он свяжется с вами по окончанию)'
+            commentText:'Сейчас этой задачей занимается ваш менеджер. Он свяжется с вами по окончанию)',
+            block: false,
+            blockText: 'Этот пункт для вас может выполнить только ваш менеджер. Пожалуйста свяжитесь с ним'
         },
         checkList: [
         ],
         sites: [
             [
                 1,
-                "satan666.horoshop.ua",
-                "Комментарии продавца по этому проекту",
-                [1,2,4,6,7,8,9,21,15,34],
-                [11,13]
+                "",
+                "",
+                [1],
+                []
             ]
         ],
         domain: "satan666",
@@ -26,7 +28,6 @@ var app = new Vue({
             //let done = this.sites[0][3].split(','),
             let done = this.sites[0][3];
             out = done.length / this.checkList.length * 100;
-            console.log(out);
             return Math.round(out);
         }
     },
@@ -89,7 +90,17 @@ var app = new Vue({
             if (this.open) this.open = false;
             else if (!this.open) this.open = true;
         },
-        openCloseInfo: function(itemId, text){
+        blockCheck: function(itemId){
+            for(i of this.checkList){
+                if (parseInt(i[0]) == parseInt(itemId)){
+                    if(parseInt(i[3]) == 0){
+                        return true
+                    }
+                }
+            }
+            return false;
+        },
+        openCloseInfo: function(itemId = -1, text){
             if(this.info.text != text){
                 if(text == '' || text == undefined){
                     this.info.text = 'Свяжитесь с вашим менеджером для уточнений и мы все расскажем по этому пункту =)';
@@ -98,20 +109,39 @@ var app = new Vue({
                     this.info.text = text;
                 }
             }
+            if(itemId >= 0){
+//!----- Проверка статуса "В работе"
             if (this.inProgressCheck(itemId)){
                 this.info.comment = true;
             }
             else{this.info.comment = false;}
+//!----- ПРоверка на блок отметки
+            
+            if(this.blockCheck(itemId)){
+                this.info.block = true;
+            }
+            else{
+                this.info.block = false;
+            }
+        }
+//------ открыват / закрывает 
             if (this.info.open) this.info.open = false;
             else if (!this.info.open) this.info.open = true;
         },
         doneClick: function(itemId){
             console.log(itemId)
             let index = this.sites[0][3].indexOf(itemId);
-            if( index < 0 && this.checkList[itemId-1][3] != 0) this.sites[0][3].push(itemId)
+            console.log(index)
+            if( index < 0 && parseInt(this.checkList[itemId-1][3]) != 0) {
+                this.sites[0][3].push(parseInt(itemId))
+                console.log('donePush');
+            }
             else{
-                if(this.checkList[itemId-1][3] != 0)this.sites[0][3].splice(index,1);
+                if(parseInt(this.checkList[itemId-1][3]) != 0) {
+                    this.sites[0][3].splice(index,1);
+                }
             } 
+            this.$forceUpdate();
             
         }
     }
@@ -119,9 +149,24 @@ var app = new Vue({
 
 function update(data) {
     app.checkList = data.checkList;
-    app.sites = data.sites;
-    app.sites[0][3] = data.sites[0][3].split(',');
-    app.sites[0][4] = data.sites[0][4].split(',');
+    app.sites[0][1] = data.sites[0][1];
+    app.sites[0][2] = data.sites[0][2];
+    try{
+    var sites3 = data.sites[0][3].split(',');
+    app.sites[0][3] = [];
+    for(item of sites3){
+        app.sites[0][3].push(parseInt(item));
+    }
+    }catch (e){};
+    try{
+        var sites4 = data.sites[0][4].split(',');
+        app.sites[0][4] = [];
+        for(item of sites4){
+            app.sites[0][4].push(parseInt(item));
+        }
+    }catch(e){};
+
+    //app.sites[0][4] = data.sites[0][4].split(',');
 }
 
 async function getData() {

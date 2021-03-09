@@ -1,7 +1,10 @@
-var vueHTML =` 
+var vueHTML = ` 
 <style>@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 * {
   font-family: 'Montserrat', sans-serif;
+}
+#header .controls{
+    padding: 35px 0 0;
 }
 
 .lds-dual-ring {
@@ -61,19 +64,33 @@ var vueHTML =`
           transform: translate(0, 200%);
 }
 
+.slide_right-leave-active,
+.slide_right-enter-active {
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.slide_right-enter {
+  -webkit-transform: translate(100%, 0);
+          transform: translate(100%, 0);
+}
+
+.slide_right-leave-to {
+  -webkit-transform: translate(200%, 0);
+          transform: translate(200%, 0);
+}
+
 .h1 {
   font-size: 28px;
   font-weight: 800;
+  color: #000;
 }
 
 .h2 {
   font-size: 24px;
   font-weight: 700;
   padding: 20px 0;
-}
-
-#header .controls {
-    margin-top: 30px;
+  color: #000;
 }
 
 #app {
@@ -85,7 +102,11 @@ var vueHTML =`
   position: absolute;
   z-index: 999;
   background: #fff;
-  color: #000;
+  overflow: hidden;
+}
+
+.check-list-page {
+  position: relative;
 }
 
 .check-list-page__container {
@@ -134,6 +155,11 @@ var vueHTML =`
           transform: rotate(-45deg);
 }
 
+.check-list-page__close--left {
+  right: unset;
+  left: 32px;
+}
+
 .check-list-page__title {
   padding: 20px 0;
 }
@@ -155,8 +181,21 @@ var vueHTML =`
   font-size: 18px;
 }
 
+.check-list-page__info {
+  top: 0;
+  right: 0;
+  position: absolute;
+  width: 40%;
+  min-width: 300px;
+  background: #fff;
+  height: 100%;
+  -webkit-box-shadow: -4px 9px 15px #86c5f1;
+          box-shadow: -4px 9px 15px #86c5f1;
+}
+
 .checklist__title {
   font-size: 18px;
+  padding-right: 25px;
 }
 
 .checklist__list {
@@ -182,11 +221,15 @@ var vueHTML =`
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   position: relative;
+  -webkit-transition: 0.2s -webkit-box-shadow;
+  transition: 0.2s -webkit-box-shadow;
   transition: 0.2s box-shadow;
+  transition: 0.2s box-shadow, 0.2s -webkit-box-shadow;
 }
 
 .checklist__block:hover {
-    box-shadow: 0 0 15px #c1c0c0;
+  -webkit-box-shadow: 0 0 15px #c1c0c0;
+          box-shadow: 0 0 15px #c1c0c0;
 }
 
 .checklist__checkbox {
@@ -198,6 +241,10 @@ var vueHTML =`
   border-radius: 4px;
   margin-right: 8px;
   position: relative;
+}
+
+.checklist__checkbox:hover {
+  border-color: green;
 }
 
 .checklist__lvl2 {
@@ -214,6 +261,7 @@ var vueHTML =`
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  color: #000;
 }
 
 .checklist__item.done {
@@ -252,6 +300,30 @@ var vueHTML =`
   top: 20px;
 }
 
+.checklist .checklist__info-button {
+  position: absolute;
+  right: 0;
+  border: 1px solid;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 50%;
+  font-size: 12px;
+  color: #1a8ad8;
+  opacity: 0.5;
+  cursor: pointer;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+
+.checklist .checklist__info-button:hover {
+  color: #000;
+  opacity: 1;
+  -webkit-transition: 0.1s all ease-in;
+  transition: 0.1s all ease-in;
+}
+
 .project-status {
   width: 100%;
   height: 30px;
@@ -285,69 +357,132 @@ var vueHTML =`
   cursor: pointer;
   border-radius: 4px;
 }
+
+.info-side__container {
+  height: 100%;
+  padding: 60px 40px;
+}
+
+.info-side__title {
+  color: #000;
+}
+
+.info-side__text {
+  color: #000;
+  font-size: 16px;
+}
+
+.info-side__comment {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  padding-bottom: 15px;
+  font-size: 16px;
+}
+
+.info-side__comment--block {
+  color: red;
+}
+
+.info-side__comment--inProgress {
+  color: #ff9800;
+}
+
+.info-side__comment-text {
+  padding-left: 5px;
+  font-size: 16px;
+}
+
+.info-side__comment-icon {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 28px;
+}
 /*# sourceMappingURL=style.css.map */
 </style>   
 
 <div id="app" v-bind:class="{open : open}">
-<div class="project-status">
-    <div class="project-status__progress" v-bind:style="{width: progress + '%'}"></div>
-    <div class="project-status__text">
-        <span class="project-status__count">
-            Ваш проект настроен на {{progress}} %  &nbsp; &nbsp;
-            <button class="project-status__button" @click="openClose()">Чеклист</button>
-        </span>
-    </div>
-</div>
-
-<transition name="slide">
-    <div class="check-list-page" v-if="open" id="checkListPage">
-        <div class="check-list-page__container">
-            <div class="check-list-page__close" @click="openClose()" id="checklistPageClose"></div>
-            <div class="check-list-page__title h1">Этапы создания интернет-магазина</div>
-            <div class="check-list-page__wrapper">
-                <div class="check-list-page__sale-comment">
-                    <div class="check-list-page__sale-title h2">Уточнения по роекту озвученные вашему менеджеру
-                    </div>
-                    <div class="check-list-page__sale-text">
-                        {{sites[0][2]}}
-                    </div>
-                </div>
-            </div>
-            <div class="check-list-page__checklist checklist">
-                <div class="checklist__title h2">Чеклист</div>
-                <div class="checklist__list">
-                    <template v-for="item of checkList">
-                        <template v-if="item[1] === 0">
-                            <div class="checklist__block">
-                                <div class="checklist__item" v-bind:class="{done : doneCounter(item[0],true) }">
-                                    <div class="checklist__checkbox"></div>
-                                    <div class="checklist__title">{{item[2]}}</div>
-                                    <div class="checklist__done-count">{{doneCounter(item[0])}}</div>
-                                </div>
-                                <div class="checklist__lvl2">
-                                    <template v-for="innerItem of checkList">
-                                        <template v-if="innerItem[1] === item[0]">
-                                            <div class="checklist__item"
-                                                v-bind:class="statusCheck(innerItem[0])" @click="doneClick(innerItem[0])">
-                                                <div class="checklist__checkbox">
-                                                    <template v-if="inProgressCheck(innerItem[0])">
-                                                        <div class="lds-dual-ring"></div>
-                                                    </template>
-                                                </div>
-                                                <div class="checklist__title">{{innerItem[2]}}</div>
-                                            </div>
-                                        </template>
-                                    </template>
-                                </div>
-                            </div>
-                        </template>
-                    </template>
-                </div>
+        <div class="project-status">
+            <div class="project-status__progress" v-bind:style="{width: progress + '%'}"></div>
+            <div class="project-status__text">
+                <span class="project-status__count">
+                    Ваш проект настроен на {{progress}} % &nbsp; &nbsp;
+                    <button class="project-status__button" @click="openClose()">Чеклист</button>
+                </span>
             </div>
         </div>
-    </div>
-</transition>
-</div>`
+
+        <transition name="slide">
+            <div class="check-list-page" v-if="open" id="checkListPage">
+                <div class="check-list-page__container">
+                    <div class="check-list-page__close" @click="openClose()"></div>
+                    <div class="check-list-page__title h1">Этапы создания интернет-магазина</div>
+                    <div class="check-list-page__wrapper">
+                        <div class="check-list-page__sale-comment">
+                            <div class="check-list-page__sale-title h2">Уточнения по проекту озвученные вашему менеджеру
+                            </div>
+                            <div class="check-list-page__sale-text">
+                                {{sites[0][2]}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-list-page__checklist checklist">
+                        <div class="checklist__title h2">Чеклист</div>
+                        <div class="checklist__list">
+                            <template v-for="item of checkList">
+                                <template v-if="item[1] === 0">
+                                    <div class="checklist__block">
+                                        <div class="checklist__item" v-bind:class="{done : doneCounter(item[0],true) }">
+                                            <div class="checklist__checkbox"></div>
+                                            <div class="checklist__title">{{item[2]}}</div>
+                                            <div class="checklist__done-count">{{doneCounter(item[0])}}</div>
+                                        </div>
+                                        <div class="checklist__lvl2">
+                                            <template v-for="innerItem of checkList">
+                                                <template v-if="innerItem[1] === item[0]">
+                                                    <div class="checklist__item"
+                                                        v-bind:class="statusCheck(innerItem[0])">
+                                                        <div class="checklist__checkbox"
+                                                            @click="doneClick(innerItem[0])">
+                                                            <template v-if="inProgressCheck(innerItem[0])">
+                                                                <div class="lds-dual-ring"></div>
+                                                            </template>
+                                                        </div>
+                                                        <div class="checklist__title">{{innerItem[2]}}</div>
+                                                        <div class="checklist__info-button" @click="openCloseInfo(innerItem[0],innerItem[4])">?
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                    <transition name="slide_right">
+                        <div class="check-list-page__info info-side" v-if="info.open">
+                            <div class="info-side__container">
+                                <div class="check-list-page__close check-list-page__close--left"
+                                    @click="openCloseInfo()"></div>
+                                <div class="info-side__title h2">Больше информации</div>
+                                <div class="info-side__comment info-side__comment--inProgress" v-if="info.comment"><div class="info-side__comment-icon"><div class="lds-dual-ring"></div></div><div class="info-side__comment-text">{{info.commentText}}</div></div>
+                                <div class="info-side__comment info-side__comment--block" v-if="info.block"><div class="info-side__comment-icon">!</div> <div class="info-side__comment-text">{{info.blockText}}</div></div>
+                                <div class="info-side__text" v-html="info.text"></div>
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+            </div>
+        </transition>
+    </div>`;
 
 function StartVueProggress() {
 
@@ -358,245 +493,210 @@ function StartVueProggress() {
 
 
 
-function vueApp(){
-    var app = new Vue({
-        el: '#app',
-        data: {
-            open: false,
-            checkList: [
-                [
-                    1,
-                    0,
-                    "Контент"
-                ],
-                [
-                    2,
-                    0,
-                    "Дизайн"
-                ],
-                [
-                    3,
-                    0,
-                    "Индивидуальная информация"
-                ],
-                [
-                    4,
-                    0,
-                    "Интеграции"
-                ],
-                [
-                    5,
-                    0,
-                    "Общие настройки сайта"
-                ],
-                [
-                    6,
-                    1,
-                    "Настройка шаблонов"
-                ],
-                [
-                    7,
-                    1,
-                    "Настройка структуры"
-                ],
-                [
-                    8,
-                    1,
-                    "Добавление товаров"
-                ],
-                [
-                    9,
-                    1,
-                    "Добавление баннеров"
-                ],
-                [
-                    10,
-                    2,
-                    "Выбрать дизайн из галереи"
-                ],
-                [
-                    11,
-                    2,
-                    "Настроить цветовую гамму"
-                ],
-                [
-                    12,
-                    2,
-                    "Внести правки"
-                ],
-                [
-                    13,
-                    2,
-                    "Добавить иконки разделов"
-                ],
-                [
-                    14,
-                    2,
-                    "Изменить иконки примуществ"
-                ],
-                [
-                    15,
-                    2,
-                    "Настроить стикеры"
-                ],
-                [
-                    16,
-                    3,
-                    "Номера телефонов"
-                ],
-                [
-                    17,
-                    3,
-                    "Адреса"
-                ],
-                [
-                    18,
-                    3,
-                    "Карта проезда"
-                ],
-                [
-                    19,
-                    3,
-                    "Время работы"
-                ],
-                [
-                    20,
-                    3,
-                    "О магазине"
-                ],
-                [
-                    21,
-                    3,
-                    "Слоган"
-                ],
-                [
-                    22,
-                    3,
-                    "Заполнение инфо страниц"
-                ],
-                [
-                    23,
-                    5,
-                    "Варианты оплат"
-                ],
-                [
-                    24,
-                    5,
-                    "Варианты доставки"
-                ]
-            ],
-            sites: [
-                [
-                    1,
-                    "satan666.horoshop.ua",
-                    "Комментарии продавца по этому проекту",
-                    [1,2,4,6,7,8,9,12,21,15,34],
-                    "11,13"
-                ]
-            ],
-            domain: "satan666",
-        },
-        computed : { 
-            progress: function(){
-                //let done = this.sites[0][3].split(','),
-                let done = this.sites[0][3];
-                out = done.length / this.checkList.length * 100;
-                console.log(out);
-                return Math.round(out);
+function vueApp() {
+
+    function update(data) {
+        app.checkList = data.checkList;
+        app.sites[0][1] = data.sites[0][1];
+        app.sites[0][2] = data.sites[0][2];
+        try {
+            var sites3 = data.sites[0][3].split(',');
+            app.sites[0][3] = [];
+            for (item of sites3) {
+                app.sites[0][3].push(parseInt(item));
             }
-        },
-        methods:{
-            checkListTitle: ()=>{
-                let out = [];
-                for(item in this.checkList){
-                    if (this.checkList[item][1] == 0) out.push(this.checkList[item][2]); 
-                    console.log(this.checkList[item][1])
-                }
-                return out;
-            },
-            statusCheck: function(itemId) {
-                //let done = this.sites[0][3].split(',');
-                let done = this.sites[0][3];
-                for(item of done){
-                    if (parseInt(item) == parseInt(itemId)){
-                        return 'done';
-                    }else{
-                        if(this.inProgressCheck(itemId)) return 'inProgress';
-                    }
-                }
-                
-            },        
-            doneCounter: function(itemId, check =false){
-                //let done = this.sites[0][3].split(','),
-                let done = this.sites[0][3],
-                    all =0,
-                    doneCount =0;
-                for(listItem of this.checkList){
-                    if (listItem[1] == parseInt(itemId)){
-                    all++;
-                    for(item of done){
-                            console.log(itemId, listItem[1] )
-                            if(listItem[0] == parseInt(item)){
-                                doneCount++;
-                            }
-                    }
-                }
-                };
-                if(check){
-                    return doneCount == all;
-                }
-                return `${doneCount}/${all}`;
-            },
-            inProgressCheck: function(itemId){
-                let inProgress = this.sites[0][4].split(',');
-                for(item of inProgress){
-                    if (parseInt(item) == parseInt(itemId)){
-                        return true;
-                    }
-                }
-            },
-            openClose: function(){
-                if (this.open) this.open = false;
-                else if (!this.open) this.open = true;
-            },
-            doneClick: function(itemId){
-                console.log(itemId)
-                let index = this.sites[0][3].indexOf(itemId);
-                if( index < 0) this.sites[0][3].push(itemId)
-                else this.sites[0][3].splice(index,1);
-                
+        } catch (e) { };
+        try {
+            var sites4 = data.sites[0][4].split(',');
+            app.sites[0][4] = [];
+            for (item of sites4) {
+                app.sites[0][4].push(parseInt(item));
             }
-        }
-    })
+        } catch (e) { };
     
+        //app.sites[0][4] = data.sites[0][4].split(',');
+    }
     
-    function getData() {
-        var app = `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec${'?domain='+window.location.hostname}`,
+    async function getData() {
+        // `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec${'?domain='+window.location.hostname}`
+        var app = `https://script.google.com/macros/s/AKfycbwI6gydsZDQXi1bMd28kZ0psylx-d93xvOlFispUT_eRvqX7QZLdJCn/exec?domain=satan666`,
             output = {},
             xhr = new XMLHttpRequest();
         xhr.open('GET', app);
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState !== 4) return;
             if (xhr.status == 200) {
                 try {
                     var output = JSON.parse(xhr.response);
-                } catch (e) {}
+                } catch (e) { }
             }
             console.log('data was get');
-            data = output;
-            update();
+            output;
+            update(output);
         }
         xhr.send()
     };
-    
-    
+
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            open: false,
+            info: {
+                open: false,
+                text: 'об`яснение по пункту',
+                comment: false,
+                commentText: 'Сейчас этой задачей занимается ваш менеджер. Он свяжется с вами по окончанию)',
+                block: false,
+                blockText: 'Этот пункт для вас может выполнить только ваш менеджер. Пожалуйста свяжитесь с ним'
+            },
+            checkList: [
+            ],
+            sites: [
+                [
+                    1,
+                    "",
+                    "",
+                    [1],
+                    []
+                ]
+            ],
+            domain: "satan666",
+        },
+        computed: {
+            progress: function () {
+                //let done = this.sites[0][3].split(','),
+                let done = this.sites[0][3];
+                out = done.length / this.checkList.length * 100;
+                return Math.round(out);
+            }
+        },
+        beforeCreate() {
+            getData();
+        },
+        methods: {
+            checkListTitle: () => {
+                let out = [];
+                for (item in this.checkList) {
+                    if (this.checkList[item][1] == 0) out.push(this.checkList[item][2]);
+                    console.log(this.checkList[item][1])
+                }
+                return out;
+            },
+            statusCheck: function (itemId) {
+                //let done = this.sites[0][3].split(',');
+                let done = this.sites[0][3];
+                for (item of done) {
+                    if (parseInt(item) == parseInt(itemId)) {
+                        return 'done';
+                    } else {
+                        if (this.inProgressCheck(itemId)) return 'inProgress';
+                    }
+                }
+
+            },
+            doneCounter: function (itemId, check = false) {
+                //let done = this.sites[0][3].split(','),
+                let done = this.sites[0][3],
+                    all = 0,
+                    doneCount = 0;
+                for (listItem of this.checkList) {
+                    if (listItem[1] == parseInt(itemId)) {
+                        all++;
+                        for (item of done) {
+                            console.log(itemId, listItem[1])
+                            if (listItem[0] == parseInt(item)) {
+                                doneCount++;
+                            }
+                        }
+                    }
+                };
+                if (check) {
+                    return doneCount == all;
+                }
+                return `${doneCount}/${all}`;
+            },
+            inProgressCheck: function (itemId) {
+                let inProgress = this.sites[0][4];
+                try {
+                    for (item of inProgress) {
+                        if (parseInt(item) == parseInt(itemId)) {
+                            return true;
+                        }
+                    }
+                } catch (e) { }
+            },
+            openClose: function () {
+                if (this.open) this.open = false;
+                else if (!this.open) this.open = true;
+            },
+            blockCheck: function (itemId) {
+                for (i of this.checkList) {
+                    if (parseInt(i[0]) == parseInt(itemId)) {
+                        if (parseInt(i[3]) == 0) {
+                            return true
+                        }
+                    }
+                }
+                return false;
+            },
+            openCloseInfo: function (itemId = -1, text) {
+                if (this.info.text != text) {
+                    if (text == '' || text == undefined) {
+                        this.info.text = 'Свяжитесь с вашим менеджером для уточнений и мы все расскажем по этому пункту =)';
+                    }
+                    else {
+                        this.info.text = text;
+                    }
+                }
+                if (itemId >= 0) {
+                    //!----- Проверка статуса "В работе"
+                    if (this.inProgressCheck(itemId)) {
+                        this.info.comment = true;
+                    }
+                    else { this.info.comment = false; }
+                    //!----- ПРоверка на блок отметки
+
+                    if (this.blockCheck(itemId)) {
+                        this.info.block = true;
+                    }
+                    else {
+                        this.info.block = false;
+                    }
+                }
+                //------ открыват / закрывает 
+                if (this.info.open) this.info.open = false;
+                else if (!this.info.open) this.info.open = true;
+            },
+            doneClick: function (itemId) {
+                console.log(itemId)
+                let index = this.sites[0][3].indexOf(itemId);
+                console.log(index)
+                if (index < 0 && parseInt(this.checkList[itemId - 1][3]) != 0) {
+                    this.sites[0][3].push(parseInt(itemId))
+                    console.log('donePush');
+                }
+                else {
+                    if (parseInt(this.checkList[itemId - 1][3]) != 0) {
+                        this.sites[0][3].splice(index, 1);
+                    }
+                }
+                this.$forceUpdate();
+
+            }
+        }
+    })
+
+
 
 
 }
 
 
 //StartVueProggress();
-window.onload = function(){
+window.onload = function () {
     console.log('StartVueProggress')
     StartVueProggress();
 };
+
+
