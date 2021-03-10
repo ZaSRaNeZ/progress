@@ -102,12 +102,13 @@ var vueHTML = `
           box-sizing: border-box;
   position: absolute;
   z-index: 999;
-  background: #fff;
+
   overflow: hidden;
 }
 
 .check-list-page {
   position: relative;
+  background: #fff;
 }
 
 .check-list-page__container {
