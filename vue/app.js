@@ -28,15 +28,10 @@ var app = new Vue({
                 []
             ]
         ],
+        progress: 0,
         domain: "satan666",
     },
     computed: {
-        progress: function () {
-            //let done = this.sites[0][3].split(','),
-            let done = this.sites[0][3];
-            out = done.length / this.checkList.length * 100;
-            return Math.round(out);
-        }
     },
     beforeCreate() {
         getData();
@@ -94,9 +89,11 @@ var app = new Vue({
             } catch (e) { }
         },
         openClose: function () {
-            if (this.open) this.open = false;
+            if (this.open){
+                this.open = false
+                this.sendInfo(this.api.infoBTN,'true')
+            }
             else if (!this.open) this.open = true;
-            this.sendInfo(this.api.checklistBTN,'true');
         },
         blockCheck: function (itemId) {
             for (i of this.checkList) {
@@ -133,23 +130,28 @@ var app = new Vue({
                 }
             }
             //------ открыват / закрывает 
-            if (this.info.open) this.info.open = false;
+            if (this.info.open){ 
+                this.info.open = false;
+                this.sendInfo(this.api.infoBTN,'true');
+            }
             else if (!this.info.open) this.info.open = true;
-            this.sendInfo(this.api.infoBTN,'true')
+            
         },
         doneClick: function (itemId) {
             console.log(itemId)
             let index = this.sites[0][3].indexOf(itemId);
             console.log(index)
-            if (index < 0 && parseInt(this.checkList[itemId - 1][3]) != 0) {
-                this.sites[0][3].push(parseInt(itemId))
-                console.log('donePush');
-            }
-            else {
-                if (parseInt(this.checkList[itemId - 1][3]) != 0) {
-                    this.sites[0][3].splice(index, 1);
+            for(item of this.checkList){
+                if(itemId == item[0]){
+                    if(index < 0 && parseInt(item[3]) != 0){
+                        this.sites[0][3].push(parseInt(itemId))
+                        console.log('donePush');
+                    }else if(parseInt(item[3]) != 0) {
+                        this.sites[0][3].splice(index, 1);
+                    }
                 }
             }
+            this.progressBarUpdate();
             this.$forceUpdate();
             this.sendInfo(this.api.doneId,this.sites[0][3])
             
@@ -171,6 +173,11 @@ var app = new Vue({
                 console.log('data was get');
             }
             xhr.send()
+        },
+        progressBarUpdate: function(){
+            let done = this.sites[0][3];
+            out = done.length / this.checkList.length * 100;
+            this.progress = Math.round(out);
         }
 
     }
@@ -194,7 +201,7 @@ function update(data) {
             app.sites[0][4].push(parseInt(item));
         }
     } catch (e) { };
-
+    app.progressBarUpdate();
     //app.sites[0][4] = data.sites[0][4].split(',');
 }
 

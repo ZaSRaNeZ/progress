@@ -10,11 +10,29 @@ var vueHTML = `
 
 .lds-dual-ring {
   display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 9px;
+  height: 9px;
+  margin: 3px;
+  border-radius: 50%;
+  border: 3px solid #ff9800;
+  border-color: #ff9800 transparent #ff9800 transparent;
+  -webkit-animation: lds-dual-ring 1.2s linear infinite;
+          animation: lds-dual-ring 1.2s linear infinite;
+}
+
+.lds-dual-ring--big {
   width: 30px;
   height: 30px;
 }
 
-.lds-dual-ring:after {
+.lds-dual-ring--big:after {
   content: " ";
   display: block;
   width: 14px;
@@ -23,8 +41,6 @@ var vueHTML = `
   border-radius: 50%;
   border: 5px solid #ff9800;
   border-color: #ff9800 transparent #ff9800 transparent;
-  -webkit-animation: lds-dual-ring 1.2s linear infinite;
-          animation: lds-dual-ring 1.2s linear infinite;
 }
 
 @-webkit-keyframes lds-dual-ring {
@@ -88,9 +104,9 @@ var vueHTML = `
 }
 
 .h2 {
-  font-size: 24px;
-  font-weight: 700;
-  padding: 20px 0;
+  font-size: 24px!important;
+  font-weight: 700!important;
+  padding: 20px 0!important;
   color: #000;
 }
 
@@ -102,7 +118,6 @@ var vueHTML = `
           box-sizing: border-box;
   position: absolute;
   z-index: 999;
-
   overflow: hidden;
 }
 
@@ -187,7 +202,7 @@ var vueHTML = `
   top: 0;
   right: 0;
   position: absolute;
-  width: 40%;
+  width: 60%;
   min-width: 300px;
   background: #fff;
   height: 100%;
@@ -196,8 +211,13 @@ var vueHTML = `
 }
 
 .checklist__title {
-  font-size: 18px;
+  font-size: 14px;
   padding-right: 25px;
+}
+
+.checklist__title--main {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .checklist__list {
@@ -206,16 +226,16 @@ var vueHTML = `
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;
 }
 
 .checklist__block {
-  width: calc(33% - 10px);
+  width: calc(25% - 10px);
   margin: 5px;
   padding: 30px;
   background: #E6F4F1;
@@ -235,10 +255,10 @@ var vueHTML = `
 }
 
 .checklist__checkbox {
-  width: 30px;
-  height: 30px;
-  min-width: 30px;
-  min-height: 30px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   border: 2px solid #3a3a3a;
   border-radius: 4px;
   margin-right: 8px;
@@ -279,13 +299,13 @@ var vueHTML = `
   display: block;
   border-bottom: 2px solid green;
   border-right: 2px solid green;
-  width: 10px;
-  height: 15px;
+  width: 8px;
+  height: 12px;
   -webkit-transform: rotate(40deg);
           transform: rotate(40deg);
   position: absolute;
-  top: 3px;
-  left: 8px;
+  top: 1px;
+  left: 5px;
 }
 
 .checklist__item.inProgress {
@@ -337,6 +357,8 @@ var vueHTML = `
   height: 100%;
   background: #3c7af3;
   width: 0;
+  -webkit-transition: 0.4s width;
+  transition: 0.4s width;
 }
 
 .project-status__text {
@@ -363,6 +385,9 @@ var vueHTML = `
 .info-side__container {
   height: 100%;
   padding: 60px 40px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  position: relative;
 }
 
 .info-side__title {
@@ -372,6 +397,8 @@ var vueHTML = `
 .info-side__text {
   color: #000;
   font-size: 16px;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .info-side__text ul, .info-side__text ol {
@@ -380,6 +407,20 @@ var vueHTML = `
 
 .info-side__text p {
   padding: 10px 0;
+}
+
+.info-side__text::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.info-side__text::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+.info-side__text::-webkit-scrollbar-thumb {
+  background-color: #1a8ad8;
+  border: 2px solid #fff;
 }
 
 .info-side__comment {
@@ -391,6 +432,9 @@ var vueHTML = `
           align-items: flex-start;
   padding-bottom: 15px;
   font-size: 16px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .info-side__comment--block {
@@ -451,7 +495,7 @@ var vueHTML = `
                                     <div class="checklist__block">
                                         <div class="checklist__item" v-bind:class="{done : doneCounter(item[0],true) }">
                                             <div class="checklist__checkbox"></div>
-                                            <div class="checklist__title">{{item[2]}}</div>
+                                            <div class="checklist__title checklist__title--main">{{item[2]}}</div>
                                             <div class="checklist__done-count">{{doneCounter(item[0])}}</div>
                                         </div>
                                         <div class="checklist__lvl2">
@@ -483,7 +527,7 @@ var vueHTML = `
                                 <div class="check-list-page__close check-list-page__close--left"
                                     @click="openCloseInfo()"></div>
                                 <div class="info-side__title h2">Больше информации</div>
-                                <div class="info-side__comment info-side__comment--inProgress" v-if="info.comment"><div class="info-side__comment-icon"><div class="lds-dual-ring"></div></div><div class="info-side__comment-text">{{info.commentText}}</div></div>
+                                <div class="info-side__comment info-side__comment--inProgress" v-if="info.comment"><div class="info-side__comment-icon"><div class="lds-dual-ring lds-dual-ring--big"></div></div><div class="info-side__comment-text">{{info.commentText}}</div></div>
                                 <div class="info-side__comment info-side__comment--block" v-if="info.block"><div class="info-side__comment-icon">!</div> <div class="info-side__comment-text">{{info.blockText}}</div></div>
                                 <div class="info-side__text" v-html="info.text"></div>
                             </div>
@@ -523,7 +567,7 @@ function vueApp() {
         app.sites[0][4].push(parseInt(item));
       }
     } catch (e) { };
-
+    app.progressBarUpdate();
     //app.sites[0][4] = data.sites[0][4].split(',');
   }
 
@@ -578,15 +622,10 @@ function vueApp() {
                 []
             ]
         ],
+        progress: 0,
         domain: "satan666",
     },
     computed: {
-        progress: function () {
-            //let done = this.sites[0][3].split(','),
-            let done = this.sites[0][3];
-            out = done.length / this.checkList.length * 100;
-            return Math.round(out);
-        }
     },
     beforeCreate() {
         getData();
@@ -644,9 +683,11 @@ function vueApp() {
             } catch (e) { }
         },
         openClose: function () {
-            if (this.open) this.open = false;
+            if (this.open){
+                this.open = false
+                this.sendInfo(this.api.infoBTN,'true')
+            }
             else if (!this.open) this.open = true;
-            this.sendInfo(this.api.checklistBTN,'true');
         },
         blockCheck: function (itemId) {
             for (i of this.checkList) {
@@ -683,23 +724,28 @@ function vueApp() {
                 }
             }
             //------ открыват / закрывает 
-            if (this.info.open) this.info.open = false;
+            if (this.info.open){ 
+                this.info.open = false;
+                this.sendInfo(this.api.infoBTN,'true');
+            }
             else if (!this.info.open) this.info.open = true;
-            this.sendInfo(this.api.infoBTN,'true')
+            
         },
         doneClick: function (itemId) {
             console.log(itemId)
             let index = this.sites[0][3].indexOf(itemId);
             console.log(index)
-            if (index < 0 && parseInt(this.checkList[itemId - 1][3]) != 0) {
-                this.sites[0][3].push(parseInt(itemId))
-                console.log('donePush');
-            }
-            else {
-                if (parseInt(this.checkList[itemId - 1][3]) != 0) {
-                    this.sites[0][3].splice(index, 1);
+            for(item of this.checkList){
+                if(itemId == item[0]){
+                    if(index < 0 && parseInt(item[3]) != 0){
+                        this.sites[0][3].push(parseInt(itemId))
+                        console.log('donePush');
+                    }else if(parseInt(item[3]) != 0) {
+                        this.sites[0][3].splice(index, 1);
+                    }
                 }
             }
+            this.progressBarUpdate();
             this.$forceUpdate();
             this.sendInfo(this.api.doneId,this.sites[0][3])
             
@@ -721,6 +767,11 @@ function vueApp() {
                 console.log('data was get');
             }
             xhr.send()
+        },
+        progressBarUpdate: function(){
+            let done = this.sites[0][3];
+            out = done.length / this.checkList.length * 100;
+            this.progress = Math.round(out);
         }
 
     }
