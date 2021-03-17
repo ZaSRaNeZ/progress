@@ -504,7 +504,7 @@ var vueHTML = `
                                                     <div class="checklist__item"
                                                         v-bind:class="statusCheck(innerItem[0])">
                                                         <div class="checklist__checkbox"
-                                                            @click="doneClick(innerItem[0])">
+                                                            @click="doneClick(innerItem[0],innerItem[2])">
                                                             <template v-if="inProgressCheck(innerItem[0])">
                                                                 <div class="lds-dual-ring"></div>
                                                             </template>
@@ -601,7 +601,8 @@ function vueApp() {
             getDataHref: 'https://script.google.com/macros/s/AKfycbyI8LJsInMo9RjnFRodPzfT_0gUT-dxSne8fwwm5PWQQQE2Fqp87ifo4ZEei0lTxWTr6g/exec',
             doneId :'doneId',
             checklistBTN : 'checklistBTN',
-            infoBTN : 'infoBTN'
+            infoBTN : 'infoBTN',
+            statisticsHref: 'https://script.google.com/macros/s/AKfycbzB0BLvFjdNbD2H5VNFIZN3lDkix1xhqJHoyqHni_0UYCb30sZK9DKaRbaFD-VzW1zv/exec'
         },
         info: {
             open: false,
@@ -685,9 +686,9 @@ function vueApp() {
         openClose: function () {
             if (this.open){
                 this.open = false
-                this.sendInfo(this.api.infoBTN,'true')
             }
-            else if (!this.open) this.open = true;
+            else if (!this.open){ this.open = true;
+                this.sendInfo(this.api.checklistBTN,'true');}
         },
         blockCheck: function (itemId) {
             for (i of this.checkList) {
@@ -731,7 +732,7 @@ function vueApp() {
             else if (!this.info.open) this.info.open = true;
             
         },
-        doneClick: function (itemId) {
+        doneClick: function (itemId,itemName) {
             console.log(itemId)
             let index = this.sites[0][3].indexOf(itemId);
             console.log(index)
@@ -740,14 +741,19 @@ function vueApp() {
                     if(index < 0 && parseInt(item[3]) != 0){
                         this.sites[0][3].push(parseInt(itemId))
                         console.log('donePush');
+                        this.sendStatistics('done',itemName);
                     }else if(parseInt(item[3]) != 0) {
                         this.sites[0][3].splice(index, 1);
+                        this.sendStatistics('UnclickDone',itemName);
+                    }else if(parseInt(item[3]) == 0) {
+                        this.sendStatistics('TryToClickBlockedItem',itemName);
                     }
                 }
             }
             this.progressBarUpdate();
             this.$forceUpdate();
-            this.sendInfo(this.api.doneId,this.sites[0][3])
+            this.sendInfo(this.api.doneId,this.sites[0][3]);
+            
             
 
         },
@@ -764,9 +770,25 @@ function vueApp() {
                         var output = JSON.parse(xhr.response);
                     } catch (e) { }
                 }
-                console.log('data was get');
+                console.log('data was send');
             }
             xhr.send()
+        },
+        sendStatistics: function(action='other',title='без названия'){
+                console.log(`${this.api.statisticsHref}?domain=${window.location.hostname}&action=${action}&title=${title}`);
+                var app = `${this.api.statisticsHref}?domain=${window.location.hostname}&action=${action}&title=${title}`,
+                    xhr = new XMLHttpRequest();
+                xhr.open('GET', app);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState !== 4) return;
+                    if (xhr.status == 200) {
+                        try {
+                            var output = JSON.parse(xhr.response);
+                        } catch (e) { }
+                    }
+                    console.log('stat was send');
+                }
+                xhr.send()
         },
         progressBarUpdate: function(){
             let done = this.sites[0][3];

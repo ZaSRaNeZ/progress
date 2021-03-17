@@ -58,7 +58,7 @@
                                                     <div class="checklist__item"
                                                         v-bind:class="statusCheck(innerItem[0])">
                                                         <div class="checklist__checkbox"
-                                                            @click="doneClick(innerItem[0])">
+                                                            @click="doneClick(innerItem[0],innerItem[2])">
                                                             <template v-if="inProgressCheck(innerItem[0])">
                                                                 <div class="lds-dual-ring"></div>
                                                             </template>
