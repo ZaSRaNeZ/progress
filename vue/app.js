@@ -25,7 +25,7 @@ var app = new Vue({
                 1,
                 "",
                 "",
-                [1],
+                [],
                 []
             ]
         ],
@@ -42,7 +42,6 @@ var app = new Vue({
             let out = [];
             for (item in this.checkList) {
                 if (this.checkList[item][1] == 0) out.push(this.checkList[item][2]);
-                console.log(this.checkList[item][1])
             }
             return out;
         },
@@ -56,7 +55,7 @@ var app = new Vue({
                     if (this.inProgressCheck(itemId)) return 'inProgress';
                 }
             }
-
+            if (this.inProgressCheck(itemId)) return 'inProgress';
         },
         doneCounter: function (itemId, check = false) {
             //let done = this.sites[0][3].split(','),
@@ -67,7 +66,6 @@ var app = new Vue({
                 if (listItem[1] == parseInt(itemId)) {
                     all++;
                     for (item of done) {
-                        console.log(itemId, listItem[1])
                         if (listItem[0] == parseInt(item)) {
                             doneCount++;
                         }
@@ -81,13 +79,11 @@ var app = new Vue({
         },
         inProgressCheck: function (itemId) {
             let inProgress = this.sites[0][4];
-            try {
                 for (item of inProgress) {
                     if (parseInt(item) == parseInt(itemId)) {
                         return true;
                     }
                 }
-            } catch (e) { }
         },
         openClose: function () {
             if (this.open){
@@ -133,15 +129,15 @@ var app = new Vue({
             //------ открыват / закрывает 
             if (this.info.open){ 
                 this.info.open = false;
-                this.sendInfo(this.api.infoBTN,'true');
             }
-            else if (!this.info.open) this.info.open = true;
+            else if (!this.info.open){ 
+                this.sendInfo(this.api.infoBTN,'true');
+                this.info.open = true;
+            }
             
         },
         doneClick: function (itemId,itemName) {
-            console.log(itemId)
             let index = this.sites[0][3].indexOf(itemId);
-            console.log(index)
             for(item of this.checkList){
                 if(itemId == item[0]){
                     if(index < 0 && parseInt(item[3]) != 0){
@@ -165,7 +161,7 @@ var app = new Vue({
         },
         sendInfo: function (param, value) {
             // `${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`
-            console.log(`${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`);
+//?            console.log(`${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`);
             var app = `${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`,
                 xhr = new XMLHttpRequest();
             xhr.open('GET', app);
@@ -197,8 +193,14 @@ var app = new Vue({
                 xhr.send()
         },
         progressBarUpdate: function(){
-            let done = this.sites[0][3];
-            out = done.length / this.checkList.length * 100;
+            let done = this.sites[0][3],
+                notParent = 0;
+            for(let item of this.checkList){
+                if(item[1] != 0){
+                    notParent++;
+                }
+            };
+            out = done.length / notParent * 100;
             this.progress = Math.round(out);
         }
 
@@ -229,7 +231,7 @@ function update(data) {
 
 async function getData() {
     // `https://script.google.com/macros/s/AKfycbyI8LJsInMo9RjnFRodPzfT_0gUT-dxSne8fwwm5PWQQQE2Fqp87ifo4ZEei0lTxWTr6g/exec${'?domain='+window.location.hostname}`
-    var app = `https://script.google.com/macros/s/AKfycbyI8LJsInMo9RjnFRodPzfT_0gUT-dxSne8fwwm5PWQQQE2Fqp87ifo4ZEei0lTxWTr6g/exec?domain=satan666`,
+    var app = `https://script.google.com/macros/s/AKfycbyI8LJsInMo9RjnFRodPzfT_0gUT-dxSne8fwwm5PWQQQE2Fqp87ifo4ZEei0lTxWTr6g/exec${'?domain='+window.location.hostname}`,
         output = {},
         xhr = new XMLHttpRequest();
     xhr.open('GET', app);
