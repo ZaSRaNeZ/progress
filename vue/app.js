@@ -118,7 +118,6 @@ var app = new Vue({
                 }
                 else { this.info.comment = false; }
                 //!----- ПРоверка на блок отметки
-
                 if (this.blockCheck(itemId)) {
                     this.info.block = true;
                 }

@@ -619,7 +619,7 @@ function vueApp() {
                 1,
                 "",
                 "",
-                [1],
+                [],
                 []
             ]
         ],
@@ -636,7 +636,6 @@ function vueApp() {
             let out = [];
             for (item in this.checkList) {
                 if (this.checkList[item][1] == 0) out.push(this.checkList[item][2]);
-                console.log(this.checkList[item][1])
             }
             return out;
         },
@@ -650,7 +649,7 @@ function vueApp() {
                     if (this.inProgressCheck(itemId)) return 'inProgress';
                 }
             }
-
+            if (this.inProgressCheck(itemId)) return 'inProgress';
         },
         doneCounter: function (itemId, check = false) {
             //let done = this.sites[0][3].split(','),
@@ -661,7 +660,6 @@ function vueApp() {
                 if (listItem[1] == parseInt(itemId)) {
                     all++;
                     for (item of done) {
-                        console.log(itemId, listItem[1])
                         if (listItem[0] == parseInt(item)) {
                             doneCount++;
                         }
@@ -675,13 +673,11 @@ function vueApp() {
         },
         inProgressCheck: function (itemId) {
             let inProgress = this.sites[0][4];
-            try {
                 for (item of inProgress) {
                     if (parseInt(item) == parseInt(itemId)) {
                         return true;
                     }
                 }
-            } catch (e) { }
         },
         openClose: function () {
             if (this.open){
@@ -727,15 +723,15 @@ function vueApp() {
             //------ открыват / закрывает 
             if (this.info.open){ 
                 this.info.open = false;
-                this.sendInfo(this.api.infoBTN,'true');
             }
-            else if (!this.info.open) this.info.open = true;
+            else if (!this.info.open){ 
+                this.sendInfo(this.api.infoBTN,'true');
+                this.info.open = true;
+            }
             
         },
         doneClick: function (itemId,itemName) {
-            console.log(itemId)
             let index = this.sites[0][3].indexOf(itemId);
-            console.log(index)
             for(item of this.checkList){
                 if(itemId == item[0]){
                     if(index < 0 && parseInt(item[3]) != 0){
@@ -759,7 +755,7 @@ function vueApp() {
         },
         sendInfo: function (param, value) {
             // `${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`
-            console.log(`${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`);
+//?            console.log(`${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`);
             var app = `${this.api.saveDataHref}?domain=${window.location.hostname}&${param}=${value}`,
                 xhr = new XMLHttpRequest();
             xhr.open('GET', app);
@@ -791,8 +787,14 @@ function vueApp() {
                 xhr.send()
         },
         progressBarUpdate: function(){
-            let done = this.sites[0][3];
-            out = done.length / this.checkList.length * 100;
+            let done = this.sites[0][3],
+                notParent = 0;
+            for(let item of this.checkList){
+                if(item[1] != 0){
+                    notParent++;
+                }
+            };
+            out = done.length / notParent * 100;
             this.progress = Math.round(out);
         }
 
